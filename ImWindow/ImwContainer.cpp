@@ -428,11 +428,11 @@ namespace ImWindow
 			{
 				float iFirstHeight = oSize.y * m_fSplitRatio - iSeparatorHalfSize - pWindow->WindowPadding.x;
 
-				ImVec4 oBackupColor = oStyle.Colors[ImGuiCol_ChildWindowBg];
+				ImVec4 oBackupColor = oStyle.Colors[ImGuiCol_ChildBg];
 
-				oStyle.Colors[ImGuiCol_ChildWindowBg].w = 0.f;
+				oStyle.Colors[ImGuiCol_ChildBg].w = 0.f;
 				ImGui::BeginChild("Top", ImVec2(0, iFirstHeight), false, ImGuiWindowFlags_NoScrollbar);
-				oStyle.Colors[ImGuiCol_ChildWindowBg] = oBackupColor;
+				oStyle.Colors[ImGuiCol_ChildBg] = oBackupColor;
 				m_pSplits[0]->Paint(/*iX, iY, iWidth, iFirstHeight*/);
 				ImGui::EndChild();
 
@@ -461,9 +461,9 @@ namespace ImWindow
 					m_bIsDrag = false;
 				}
 
-				oStyle.Colors[ImGuiCol_ChildWindowBg].w = 0.f;
+				oStyle.Colors[ImGuiCol_ChildBg].w = 0.f;
 				ImGui::BeginChild("Bottom", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
-				oStyle.Colors[ImGuiCol_ChildWindowBg] = oBackupColor;
+				oStyle.Colors[ImGuiCol_ChildBg] = oBackupColor;
 				m_pSplits[1]->Paint(/*iX, iY + iFirstHeight, iWidth, iSecondHeight*/);
 				ImGui::EndChild();
 			}
@@ -471,11 +471,11 @@ namespace ImWindow
 			{
 				float iFirstWidth = oSize.x * m_fSplitRatio - iSeparatorHalfSize - pWindow->WindowPadding.y;
 
-				ImVec4 oBackupColor = oStyle.Colors[ImGuiCol_ChildWindowBg];
+				ImVec4 oBackupColor = oStyle.Colors[ImGuiCol_ChildBg];
 
-				oStyle.Colors[ImGuiCol_ChildWindowBg].w = 0.f;
+				oStyle.Colors[ImGuiCol_ChildBg].w = 0.f;
 				ImGui::BeginChild("Left", ImVec2(iFirstWidth, 0), false, ImGuiWindowFlags_NoScrollbar);
-				oStyle.Colors[ImGuiCol_ChildWindowBg] = oBackupColor;
+				oStyle.Colors[ImGuiCol_ChildBg] = oBackupColor;
 				m_pSplits[0]->Paint();
 				ImGui::EndChild();
 
@@ -508,9 +508,9 @@ namespace ImWindow
 
 				ImGui::SameLine();
 
-				oStyle.Colors[ImGuiCol_ChildWindowBg].w = 0.f;
+				oStyle.Colors[ImGuiCol_ChildBg].w = 0.f;
 				ImGui::BeginChild("Right", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
-				oStyle.Colors[ImGuiCol_ChildWindowBg] = oBackupColor;
+				oStyle.Colors[ImGuiCol_ChildBg] = oBackupColor;
 				m_pSplits[1]->Paint();
 				ImGui::EndChild();
 			}
@@ -864,12 +864,12 @@ namespace ImWindow
 				break;
 			case ImwWindowManager::E_TABCOLORMODE_BACKGROUND:
 				oNormalTab = ImColor(
-					oStyle.Colors[ImGuiCol_WindowBg].x + (oStyle.Colors[ImGuiCol_ChildWindowBg].x - oStyle.Colors[ImGuiCol_WindowBg].x) * 0.5f,
-					oStyle.Colors[ImGuiCol_WindowBg].y + (oStyle.Colors[ImGuiCol_ChildWindowBg].y - oStyle.Colors[ImGuiCol_WindowBg].y) * 0.5f,
-					oStyle.Colors[ImGuiCol_WindowBg].z + (oStyle.Colors[ImGuiCol_ChildWindowBg].z - oStyle.Colors[ImGuiCol_WindowBg].z) * 0.5f,
-					oStyle.Colors[ImGuiCol_WindowBg].w + (oStyle.Colors[ImGuiCol_ChildWindowBg].w - oStyle.Colors[ImGuiCol_WindowBg].w) * 0.5f
+					oStyle.Colors[ImGuiCol_WindowBg].x + (oStyle.Colors[ImGuiCol_ChildBg].x - oStyle.Colors[ImGuiCol_WindowBg].x) * 0.5f,
+					oStyle.Colors[ImGuiCol_WindowBg].y + (oStyle.Colors[ImGuiCol_ChildBg].y - oStyle.Colors[ImGuiCol_WindowBg].y) * 0.5f,
+					oStyle.Colors[ImGuiCol_WindowBg].z + (oStyle.Colors[ImGuiCol_ChildBg].z - oStyle.Colors[ImGuiCol_WindowBg].z) * 0.5f,
+					oStyle.Colors[ImGuiCol_WindowBg].w + (oStyle.Colors[ImGuiCol_ChildBg].w - oStyle.Colors[ImGuiCol_WindowBg].w) * 0.5f
 				);
-				oSelectedTab = oStyle.Colors[ImGuiCol_ChildWindowBg];
+				oSelectedTab = oStyle.Colors[ImGuiCol_ChildBg];
 				oBorderColor = oStyle.Colors[ImGuiCol_Border];
 				break;
 			case ImwWindowManager::E_TABCOLORMODE_CUSTOM:
@@ -895,7 +895,10 @@ namespace ImWindow
 		//Drop shadows
 		if (oConfig.m_bShowTabShadows)
 		{
-			const ImVec2 uv = GImGui->FontTexUvWhitePixel;
+			ImVec2 uv;
+			uv.x = GImGui->Font->FindGlyph(' ')->U0;
+			uv.y = GImGui->Font->FindGlyph(' ')->V0;
+
 			pDrawList->PrimReserve(3, 3);
 			pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx)); pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx + 1)); pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx + 2));
 			pDrawList->PrimWriteVtx(ImVec2(oRectMin.x - oConfig.m_fTabOverlap - oConfig.m_fTabShadowDropSize, oRectMax.y), uv, ImColor(0.f, 0.f, 0.f, 0.f));
@@ -931,18 +934,18 @@ namespace ImWindow
 
 		if (bFocused)
 		{
-			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data + 1, pDrawList->_Path.Size - 1, bFocused ? oSelectedTab : oNormalTab, true);
+			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data + 1, pDrawList->_Path.Size - 1, bFocused ? oSelectedTab : oNormalTab);
 			if (fEndLinePos > oRectMax.x)
 			{
 				pDrawList->PathLineTo(ImVec2(fEndLinePos, oRectMax.y));
 			}
 
 			if (oConfig.m_bShowTabBorder)
-				pDrawList->AddPolyline(pDrawList->_Path.Data, pDrawList->_Path.Size, oBorderColor, false, 1.5f, true);
+				pDrawList->AddPolyline(pDrawList->_Path.Data, pDrawList->_Path.Size, oBorderColor, false, 1.5f);
 		}
 		else
 		{
-			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data, pDrawList->_Path.Size, bFocused ? oSelectedTab : oNormalTab, true);
+			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data, pDrawList->_Path.Size, bFocused ? oSelectedTab : oNormalTab);
 		}
 
 		pDrawList->PathClear();

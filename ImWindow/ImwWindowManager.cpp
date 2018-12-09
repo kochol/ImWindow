@@ -825,8 +825,8 @@ namespace ImWindow
 
 		if (pWindow->IsShowContent())
 		{
-			ImGui::SetNextWindowPos(ImVec2(0, fTop), ImGuiSetCond_Always);
-			ImGui::SetNextWindowSize(ImVec2(pWindow->GetSize().x, pWindow->GetSize().y - fTop - fBottom), ImGuiSetCond_Always);
+			ImGui::SetNextWindowPos(ImVec2(0, fTop), ImGuiCond_Always);
+			ImGui::SetNextWindowSize(ImVec2(pWindow->GetSize().x, pWindow->GetSize().y - fTop - fBottom), ImGuiCond_Always);
 			int iFlags = ImGuiWindowFlags_NoTitleBar
 				| ImGuiWindowFlags_NoResize
 				| ImGuiWindowFlags_NoMove
@@ -843,7 +843,7 @@ namespace ImWindow
 
 			PushStyle();
 
-			ImGui::Begin( "Main", NULL, ImVec2( 0.f, 0.f ), 1.f, iFlags);
+			ImGui::Begin("Main", NULL, iFlags);// , ImVec2(0.f, 0.f), 1.f, iFlags);
 
 			if (NULL != m_pDraggedWindow)
 			{
@@ -874,13 +874,13 @@ namespace ImWindow
 
 			if (pWindow->GetType() == E_PLATFORM_WINDOW_TYPE_MAIN && m_lStatusBars.size() > 0)
 			{
-				ImGui::SetNextWindowPos(ImVec2(0, pWindow->GetSize().y - fBottom), ImGuiSetCond_Always);
-				ImGui::SetNextWindowSize(ImVec2(pWindow->GetSize().x, fBottom), ImGuiSetCond_Always);
+				ImGui::SetNextWindowPos(ImVec2(0, pWindow->GetSize().y - fBottom), ImGuiCond_Always);
+				ImGui::SetNextWindowSize(ImVec2(pWindow->GetSize().x, fBottom), ImGuiCond_Always);
 
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, m_oConfig.m_oStatusBarWindowPadding);
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, m_oConfig.m_oStatusBarFramePadding);
-				ImGui::Begin("##StatusBar", NULL, ImVec2(0,0), 1.f, iFlags);
+				ImGui::Begin("##StatusBar", NULL, iFlags);//ImVec2(0,0), 1.f, iFlags);
 
 				ImGui::Columns((int)m_lStatusBars.size());
 				for (ImwStatusBarList::iterator it = m_lStatusBars.begin(); it != m_lStatusBars.end(); ++it )
