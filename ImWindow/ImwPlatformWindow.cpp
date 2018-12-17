@@ -30,6 +30,7 @@ namespace ImWindow
 			oNewIO.SetClipboardTextFn = oGlobalIO.SetClipboardTextFn;
 			oNewIO.ImeSetInputScreenPosFn = oGlobalIO.ImeSetInputScreenPosFn;
 			oNewIO.IniFilename = NULL;
+			oNewIO.Fonts = oGlobalIO.Fonts;
 		}
 	}
 
