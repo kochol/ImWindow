@@ -9,6 +9,7 @@
 #include "ImwStatusBar.h"
 #include "ImwToolBar.h"
 #include "JsonValue.h"
+#include "../../../include/ari/en/gui/DockableWindow.hpp"
 
 namespace ImWindow
 {
@@ -21,6 +22,7 @@ namespace ImWindow
 		friend class ImwToolBar;
 		friend class ImwPlatformWindow;
 		friend class ImwContainer;
+		friend class ari::DockableWindow;
 
 		enum EPlatformWindowAction
 		{
