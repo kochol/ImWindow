@@ -62,7 +62,7 @@ namespace ImWindow
 
 		if ( NULL != pWindow )
 		{
-			IM_ASSERT(eOrientation != E_DOCK_ORIENTATION_CENTER || !IsSplit());
+//			IM_ASSERT(eOrientation != E_DOCK_ORIENTATION_CENTER || !IsSplit());
 
 			if ( !IsSplit() )
 			{
@@ -140,7 +140,7 @@ namespace ImWindow
 				switch (eOrientation)
 				{
 				case E_DOCK_ORIENTATION_CENTER:
-					IM_ASSERT(false);
+//					IM_ASSERT(false);
 					break;
 				case E_DOCK_ORIENTATION_TOP:
 					{
